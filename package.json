@@ -1,6 +1,6 @@
 {
-  "name": "playstation-nav",
-  "version": "0.0.0",
+  "name": "curtain-nav",
+  "version": "0.1.0",
   "description": "",
   "main": "index.html",
   "scripts": {
@@ -24,6 +24,11 @@
     "jshint-stylish": "^1.0.0",
     "matchdep": "^0.3.0",
     "minifyify": "^6.1.0",
+    "reactify": "^1.1.1",
     "time-grunt": "^1.2.1"
+  },
+  "dependencies": {
+    "react": "^0.14.7",
+    "react-dom": "^0.14.7"
   }
 }

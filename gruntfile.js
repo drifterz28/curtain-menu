@@ -28,7 +28,7 @@ module.exports = function(grunt) {
                     browserifyOptions: {
                         debug: true
                     },
-                    //transform: ['reactify'],
+                    transform: ['reactify'],
                     plugin: [ [ 'minifyify', {
                         minify: false,
                         map: 'main.js.map',
@@ -47,7 +47,6 @@ module.exports = function(grunt) {
         jshint: {
             all: '<%= project.srcJs %>/{,*/}*.js',
             options: {
-                //ignores: ['<%= project.src_js %>/lib/handlebars.js'],
                 jshintrc: '.jshintrc',
                 reporter: require('jshint-stylish'),
             },
@@ -91,7 +90,7 @@ module.exports = function(grunt) {
         },
         watch: {
             scripts: {
-                files: ['<%= project.srcJs %>/**/*.js', '<%= project.src %>/react/*.jsx'],
+                files: ['<%= project.srcJs %>/**/*.{js,jsx}'],
                 tasks: ['browserify:dist']
             },
             less: {

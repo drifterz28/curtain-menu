@@ -1,70 +1,90 @@
-var simpleSwipe = require('./simple-swipe');
+'use strict';
 
-var hamburger = document.querySelector('.hamburger');
-var menu = document.querySelector('.navMenu');
-var subNavLinks = document.querySelectorAll('.subnavLink');
-var subNav = document.querySelector('.subNav');
-var slideControl = document.querySelector('.slideControl');
+var React = require('react');
+var ReactDom = require('react-dom');
+var app = React.createFactory(require('./app.jsx'));
+var navData = {
+	SiteName: "Cool Site",
+	menu: [
+		{
+			title: "Technology",
+			icon: "usb",
+			subCat: [
+				{
+					title: "IoT",
+					icon: "wifi"
+				},
+				{
+					title: "Arduino",
+					icon: "android"
+				},
+				{
+					title: "iPhone",
+					icon: "apple"
+				},
+				{
+					title: "Raspberry Pi",
+					icon: "lightbulb-o"
+				},
+				{
+					title: "Android",
+					icon: "mobile"
+				}
+			]
+		},
+		{
+			title: "Motorcycles",
+			icon: "motorcycle",
+			subCat: [
+				{
+					title: "Motorcycle Racing",
+					icon: "motorcycle"
+				}
+			]
+		},
+		{
+			title: "Cars",
+			icon: "car",
+			subCat: [
+				{
+					title: "Supercars",
+					icon: "car"
+				},
+				{
+					title: "Formula One",
+					icon: "car"
+				},
+				{
+					title: "Camaro",
+					icon: "car"
+				}
+			]
+		}
+	]
+};
 
-hamburger.addEventListener('click', function(e) {
-	e.preventDefault();
-	var target = e.currentTarget;
-	var actives = document.querySelectorAll('.active');
-	target.classList.toggle('active');
-	for(var i = 0; i < actives.length; i++) {
-		actives[i].classList.remove('active');
-	}
-	subNav.classList.remove('open');
-	subNav.setAttribute('style', '');
-	menu.classList.toggle('open');
-});
-
-for (var i = 0; i < subNavLinks.length; i++) {
-	subNavLinks[i].addEventListener('click', subNavControl);
+function init() {
+	ReactDom.render(app(navData), document.querySelector('.site'));
 }
 
-function subNavControl(e) {
-	e.preventDefault();
-	var isOpen = subNav.classList.contains('open');
-	var target = e.currentTarget;
-	var targetText = target.textContent;
-	subNav.setAttribute('style', '');
-	subNav.classList.toggle('open');
-	if (isOpen) {
-		subNav.classList.toggle('open');
-	}
-	for(var i = 0; i < subNavLinks.length; i++) {
-		subNavLinks[i].classList.remove('active');
-	}
-	target.classList.add('active');
-	subNav.querySelector('.subHeaderTitle').textContent = targetText;
-}
+init();
+/*
+google.load("feeds", "1");
 
-var subNavPosMoveRight = 0;
-var x = new simpleSwipe(slideControl,
-	function(swipe) {
-		var target = swipe.event.currentTarget.parentNode;
-		target.classList.add('animate');
-		if(swipe.direction === 'right') {
-			console.log('right ', (subNavPosMoveRight + swipe.length));
-			target.style.transform = 'translateX(' + (subNavPosMoveRight + swipe.length) + 'px)';
-		}
-		if(swipe.direction === 'left') {
-			console.log('left ', (subNavPosMoveRight - swipe.length));
-			target.style.transform = 'translateX(' + (subNavPosMoveRight - swipe.length) + 'px)';
-		}
-	},
-	function(swipe) {
-		swipe.event.preventDefault();
-		if(swipe.direction === 'right' || swipe.direction === 'left') {
-			subNavPosMoveRight = swipe.length;
-			var target = swipe.event.currentTarget.parentNode;
-			console.log(subNavPosMoveRight);
-			if (subNavPosMoveRight < 1) {
-				target.style.transform = 'translateX(0)';
-				subNavPosMoveRight = 0;
+function initialize() {
+	var feed = new google.feeds.findFeeds("technology IoT", findDone);
+	function findDone(result) {
+		console.log(result);
+		if (!result.error) {
+			var container = document.getElementById("feed");
+			for (var i = 0; i < result.feed.entries.length; i++) {
+				var entry = result.feed.entries[i];
+				var div = document.createElement("div");
+				div.appendChild(document.createTextNode(entry.title));
+				container.appendChild(div);
 			}
-			target.classList.remove('animate');
 		}
 	}
-);
+}
+google.setOnLoadCallback(initialize);
+*/

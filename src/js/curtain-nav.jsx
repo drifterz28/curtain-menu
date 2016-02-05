@@ -1,27 +1,53 @@
 'use strict';
 var React = require('react');
+var events = require('./events');
 
 var SubMenu = React.createClass({
+	getInitialState: function() {
+		return {
+			menuItem: {
+				subCat: []
+			}
+		};
+	},
+	componentDidMount: function() {
+		events.setup();
+	},
 	componentWillReceiveProps: function(nextProps) {
 		console.log('nextProps sub ', nextProps);
+		events.subNavControl();
+		this.setState({
+			menuItem: nextProps.menuItem
+		});
 	},
 	render: function() {
-		console.log(this.props);
+		console.log('this state ', this.state.menuItem);
 		return (
 			<div className="subNav">
 				<div className="slideControl">
 					<i className="fa fa-bars fa-rotate-90"></i>
 				</div>
 				<div className="subHeader">
-					<span className="subHeaderTitle"></span>
+					<span className="subHeaderTitle">{this.state.menuItem.title}</span>
 				</div>
+				<ul className="subNavLinks">
+					{this.state.menuItem.subCat.map(function(subItem, i) {
+						return (
+							<li key={i}>
+								<a href="#" className="subnavLink" data-key={i} onClick={this.props.onClick}>
+									<i className={'fa fa-' + subItem.icon}></i>
+									{subItem.title}
+								</a>
+							</li>
+						);
+					}.bind(this))}
+				</ul>
 			</div>
 		);
 	}
 });
 
 var Menu = React.createClass({
-
 	render: function() {
 		return (
 			<div className="navMenu">
@@ -45,30 +71,29 @@ var Menu = React.createClass({
 module.exports = React.createClass({
 	getInitialState: function() {
 		return {
-			subMenu: []
+			menuItem: {}
 		};
-	},
-	componentWillReceiveProps: function(nextProps) {
-		console.log('nextProps ', nextProps);
 	},
 	subNav: function(e) {
 		e.preventDefault();
 		var target = e.currentTarget;
 		var index = target.getAttribute('data-key');
-		var subCat = this.props.menu[index].subCat;
-		if(subCat.length > 0) {
+		var menuItem = this.props.menu[index];
+		if(menuItem.subCat.length > 0) {
 			this.setState({
-				subMenu: subCat
+				menuItem: menuItem
 			});
 		} else {
+			console.log('noting to show');
 			// fire some function to make this the content filler
 		}
+		target.classList.add('active');
 	},
 	render: function() {
 		return (
 			<div>
 				<Menu menu={this.props.menu} onClick={this.subNav}/>
-				<SubMenu subMenu={this.state.subMenu}/>
+				<SubMenu menuItem={this.state.menuItem}/>
 			</div>
 		);
 	}

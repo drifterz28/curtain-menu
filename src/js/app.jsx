@@ -33,11 +33,7 @@ var Contents = React.createClass({
 });
 
 module.exports = React.createClass({
-	componentWillReceiveProps: function(nextProps) {
-		console.log('nextProps ', nextProps);
-	},
 	render: function() {
-		console.log(this.props);
 		return (
 			<div>
 				<Header title={this.props.SiteName}/>

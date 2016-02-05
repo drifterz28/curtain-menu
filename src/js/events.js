@@ -27,11 +27,8 @@ module.exports = {
 		subNav.setAttribute('style', '');
 		menu.classList.toggle('open');
 	},
-	subNavControl: function(e) {
-		e.preventDefault();
+	subNavControl: function() {
 		var isOpen = subNav.classList.contains('open');
-		var target = e.currentTarget;
-		var targetText = target.textContent;
 		subNav.setAttribute('style', '');
 		subNav.classList.toggle('open');
 		if (isOpen) {
@@ -40,10 +37,7 @@ module.exports = {
 		for(var i = 0; i < subNavLinks.length; i++) {
 			subNavLinks[i].classList.remove('active');
 		}
-		target.classList.add('active');
-		subNav.querySelector('.subHeaderTitle').textContent = targetText;
 	}
-
 };
 /*
 for (var i = 0; i < subNavLinks.length; i++) {

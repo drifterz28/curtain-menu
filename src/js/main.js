@@ -59,6 +59,11 @@ var navData = {
 					icon: "car"
 				}
 			]
+		},
+		{
+			title: "Nothing really",
+			icon: "coffee",
+			subCat: []
 		}
 	]
 };

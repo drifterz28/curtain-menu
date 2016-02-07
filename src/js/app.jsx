@@ -2,6 +2,7 @@
 var React = require('react');
 var events = require('./events');
 var Curtain = require('./curtain-nav.jsx');
+var Content = require('./content.jsx');
 
 var Header = React.createClass({
 	componentDidMount: function() {
@@ -22,23 +23,22 @@ var Header = React.createClass({
 	}
 });
 
-var Contents = React.createClass({
-	render: function() {
-		return (
-			<div className="container">
-				{this.props.contents}
-			</div>
-		);
-	}
-});
-
 module.exports = React.createClass({
+	getInitialState: function() {
+		return {
+			entries: []
+		};
+	},
+	updateContent: function(entries) {
+		console.log(entries);
+		this.setState({entries: entries});
+	},
 	render: function() {
 		return (
 			<div>
 				<Header title={this.props.SiteName}/>
-				<Contents />
-				<Curtain menu={this.props.menu}/>
+				<Content entries={this.state.entries}/>
+				<Curtain updateContent={this.updateContent} menu={this.props.menu}/>
 			</div>
 		);
 	}

@@ -1,3 +1,4 @@
+/* globals google */
 'use strict';
 
 var React = require('react');
@@ -68,11 +69,12 @@ var navData = {
 	]
 };
 
-function init() {
+function initialize() {
 	ReactDom.render(app(navData), document.querySelector('.site'));
 }
 
-init();
+google.load("feeds", "1");
+google.setOnLoadCallback(initialize);
 /*
 google.load("feeds", "1");
 

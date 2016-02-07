@@ -1,3 +1,4 @@
+/* globals google */
 'use strict';
 var React = require('react');
 var events = require('./events');
@@ -14,14 +15,26 @@ var SubMenu = React.createClass({
 		events.setup();
 	},
 	componentWillReceiveProps: function(nextProps) {
-		console.log('nextProps sub ', nextProps);
 		events.subNavControl();
 		this.setState({
 			menuItem: nextProps.menuItem
 		});
 	},
+	linkClick: function(e) {
+		e.preventDefault();
+		var target = e.currentTarget;
+		var keywords = target.textContent;
+
+		events.closeMenu(e);
+		var feed = new google.feeds.findFeeds(keywords, function(result) {
+			console.log(result);
+			if (!result.error) {
+				this.props.updateContent(result.entries);
+			}
+		}.bind(this));
+		console.log(keywords + ' link click');
+	},
 	render: function() {
-		console.log('this state ', this.state.menuItem);
 		return (
 			<div className="subNav">
 				<div className="slideControl">
@@ -30,11 +43,11 @@ var SubMenu = React.createClass({
 				<div className="subHeader">
 					<span className="subHeaderTitle">{this.state.menuItem.title}</span>
 				</div>
-				<ul className="subNavLinks">
+				<ul className="subMenuLinks">
 					{this.state.menuItem.subCat.map(function(subItem, i) {
 						return (
 							<li key={i}>
-								<a href="#" className="subnavLink" data-key={i} onClick={this.props.onClick}>
+								<a href="#" className="links" data-key={i} onClick={this.linkClick}>
 									<i className={'fa fa-' + subItem.icon}></i>
 									{subItem.title}
 								</a>
@@ -55,7 +68,7 @@ var Menu = React.createClass({
 					{this.props.menu.map(function(menuItem, i) {
 						return (
 							<li key={i}>
-								<a href="#" className="subnavLink" data-key={i} onClick={this.props.onClick}>
+								<a href="#" className="subNavLink" data-key={i} onClick={this.props.onClick}>
 									<i className={'fa fa-' + menuItem.icon}></i>
 									{menuItem.title}
 								</a>
@@ -74,47 +87,37 @@ module.exports = React.createClass({
 			menuItem: {}
 		};
 	},
+	updateContent: function(entries) {
+		this.props.updateContent(entries);
+	},
 	subNav: function(e) {
 		e.preventDefault();
 		var target = e.currentTarget;
 		var index = target.getAttribute('data-key');
+		var keywords = target.textContent;
 		var menuItem = this.props.menu[index];
 		if(menuItem.subCat.length > 0) {
 			this.setState({
 				menuItem: menuItem
 			});
 		} else {
-			console.log('noting to show');
 			// fire some function to make this the content filler
+			events.closeMenu(e);
+			var feed = new google.feeds.findFeeds(keywords, function(result) {
+				console.log(result);
+				if (!result.error) {
+					this.updateContent(result.entries);
+				}
+			}.bind(this));
 		}
-		target.classList.add('active');
+		events.setActive(target);
 	},
 	render: function() {
 		return (
 			<div>
 				<Menu menu={this.props.menu} onClick={this.subNav}/>
-				<SubMenu menuItem={this.state.menuItem}/>
+				<SubMenu updateContent={this.updateContent} menuItem={this.state.menuItem}/>
 			</div>
 		);
 	}
 });
-/*
-<div class="navMenu">
-	<ul class="mainNav">
-		<li>
-			<a href="#" class="subnavLink">
-				<i class="fa fa-bluetooth-b"></i>
-				Technology
-			</a>
-		</li>
-	</ul>
-</div>
-<div class="subNav">
-	<div class="slideControl">
-		<i class="fa fa-bars fa-rotate-90"></i>
-	</div>
-	<div class="subHeader">
-		<span class="subHeaderTitle"></span>
-	</div>
-</div>
-*/

@@ -11,12 +11,13 @@ module.exports = {
 	setup: function() {
 		hamburger = document.querySelector('.hamburger');
 		menu = document.querySelector('.navMenu');
-		subNavLinks = document.querySelectorAll('.subnavLink');
+		subNavLinks = document.querySelectorAll('.subNavLink');
 		subNav = document.querySelector('.subNav');
 		slideControl = document.querySelector('.slideControl');
 	},
 	hamburger: function(e) {
 		e.preventDefault();
+		console.log(e.currentTarget);
 		var target = e.currentTarget;
 		var actives = document.querySelectorAll('.active');
 		target.classList.toggle('active');
@@ -24,19 +25,31 @@ module.exports = {
 			actives[i].classList.remove('active');
 		}
 		subNav.classList.remove('open');
-		subNav.setAttribute('style', '');
 		menu.classList.toggle('open');
+	},
+	closeMenu: function() {
+		var opens = document.querySelectorAll('.open, .active');
+		for(var i = 0; i < opens.length; i++) {
+			opens[i].classList.remove('open');
+			opens[i].classList.remove('active');
+		}
+	},
+	setActive: function(target) {
+		for(var i = 0; i < subNavLinks.length; i++) {
+			subNavLinks[i].classList.remove('active');
+		}
+		target.classList.add('active');
 	},
 	subNavControl: function() {
 		var isOpen = subNav.classList.contains('open');
-		subNav.setAttribute('style', '');
+		//subNav.setAttribute('style', '');
 		subNav.classList.toggle('open');
 		if (isOpen) {
 			subNav.classList.toggle('open');
 		}
-		for(var i = 0; i < subNavLinks.length; i++) {
-			subNavLinks[i].classList.remove('active');
-		}
+		//for(var i = 0; i < subNavLinks.length; i++) {
+		//	subNavLinks[i].classList.remove('active');
+		//}
 	}
 };
 /*
